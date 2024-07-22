@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.delivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+</head>
+<body>
+    <div id="navbar-app">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <a href="{% url 'home' %}" class="navbar-item">Time Tracker</a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    <a href="{% url 'plans' %}" class="navbar-item">Plans</a>
+                    
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a href="#" class="button is-success">Sign Up</a>
+                            <a href="#" class="button">Log In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <section class="section">
+        {% block content %}
+        {% endblock %}
+    </section>
+
+    <footer class="footer">
+        <div class="columns is-multiline">
+            <div class="column is-4">
+                <h2 class="subtitle">Time Tracker</h2>
+            </div>
+    
+            <div class="column is-offset-6 is-2">
+                <ul>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-12 has-text-centered">
+                <p>Copyright (c) 2024</p>
+            </div>
+        </div>
+
+
+    </footer>
+</body>
+</html>
