@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from apps.core import views
+from core import views as coreview
+from userprofile import views as userprofileview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('privacy', views.privacy, name='privacy'),
-    path('terms', views.terms, name='terms'),
-    path('plans', views.plans, name='plans'),
+    path('', coreview.home, name='home'),
+    path('privacy/', coreview.privacy, name='privacy'),
+    path('terms/', coreview.terms, name='terms'),
+    path('plans/', coreview.plans, name='plans'),
+
+
+    path('signup/', userprofileview.signup, name='signup'),
 ]
