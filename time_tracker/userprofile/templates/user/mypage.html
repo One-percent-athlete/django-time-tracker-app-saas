@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Page
+{% endblock %}
+
+{% block content %}
+
+<nav class="breadcrumb" aria-label="breadcrumb">
+    <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li class="is-active"><a href="{% url 'mypage' %}">My Page</a></li>
+    </ul>
+</nav>
+<div class="columns">
+    <div class="column is-6">
+        <div class="media mb-4">
+            <div class="media-left">
+            </div>
+            <div class="media-content">
+                <p class="title is-3">{% firstof user.get_full_name user.username %}</p>
+                <p class="subtitle is-6">{{ user.email }}</p>
+            </div>
+        </div>
+    
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <a href="#" class="button is-info">Edit Profile</a>
+            <button class="button is-danger" type="submit">Logout</button>
+        </form>
+        <!-- <a href="{% url 'logout' %}" class="button is-danger">Logout</a> -->
+    </div>
+</div>
+{% endblock %}
+
+

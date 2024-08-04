@@ -16,7 +16,7 @@ Sign Up
 
 <div class="columns" id="signup-app">
     <div class="column is-6 is-offset-3">
-        <form method="post" action="." class="mt-6" v-on:submit="validateForm">
+        <form method="post" action="." class="mt-6" v-on:submit="validateForm" novalidate>
             {% csrf_token %}
 
             {% if form.errors %}
@@ -70,11 +70,64 @@ Sign Up
             </div>
         </form>
     </div>
-
 </div>
+
+{% endblock %}
 
 {% block script %}
 
-{% endblock %}
+<script>
+    const SignupApp = {
+        data() {
+            return {
+                username: '',
+                password1: '',
+                password2: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (!this.validateEmail(this.username)) {
+                    this.errors.push('Your Email Is Not Valid.')
+                }
+
+                // if (this.password1 === '') {
+                //     this.errors.push('Your Password Is Missing.')
+                // }
+                // if (this.password1.length < 8 ) {
+                //     this.errors.push('Your Password Must Be At Least 8 Characters.')
+                // }
+                // if (!isNaN(password1)) {
+                //     this.errors.push('Your Password Must Contain At Least 1 Alphabet.')
+                // }
+                // if (this.password1 !== this.password2) {
+                //     this.errors.push('Your Passwords Do Not Match.')
+                // }
+
+                if (this.errors.length) {
+                    e.preventDefault()
+                    return false
+                } else {
+                    return true
+                }
+
+            },
+            validateEmail(email) {
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    return true
+                }
+                return false
+            }
+        }
+    }
+    
+    Vue.createApp(SignupApp).mount('#signup-app')
+</script>
 
 {% endblock %}
+
+

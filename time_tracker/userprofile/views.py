@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import UserProfile
@@ -23,3 +24,7 @@ def signup(request):
         form = UserCreationForm()
 
     return render(request, 'user/signup.html', {'form':form})
+
+@login_required
+def mypage(request):
+    return render(request, 'user/mypage.html')
