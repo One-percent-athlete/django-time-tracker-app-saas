@@ -18,7 +18,10 @@
                     {% if request.user.is_superuser %}
                         <a href="http://127.0.0.1:8000/admin/" class="navbar-item">Admin</a>
                     {% endif %}
+
+                    {% if not request.user.is_authenticated %}
                     <a href="{% url 'plans' %}" class="navbar-item">Plans</a>
+                    {% endif %}
                     
                     <div class="navbar-item">
                         <div class="buttons">

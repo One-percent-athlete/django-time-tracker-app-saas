@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Team
+{% endblock %}
+
+{% block content %}
+
+<nav class="breadcrumb" aria-label="breadcrumb">
+    <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="{% url 'mypage' %}">My Page</a></li>
+        <li class="is-active"><a href="{% url 'create_team' %}" aria-current="page">Create Team</a></li>
+    </ul>
+</nav>
+
+
+<div class="columns" id="team-app">
+    <div class="column is-4">
+        <h1 class="title">Create Team</h1>
+
+        <form method="post" action="." class="mt-6" @submit="validateForm">
+            {% csrf_token %}
+            
+            <div class="field">
+                <label>Team Name</label>
+                <div class="control">
+                    <input type="text" name="name" id="id_name" v-model="name">
+                </div>
+            </div>
+
+            <div class="notification is-danger" v-if="errors.length">
+                <p v-for="error in errors">
+                    [[ error ]]
+                </p>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success">Create Team</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    const TeamApp = {
+        data() {
+            return {
+                name: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+                if (this.name) {
+                    return true
+                }
+                
+                e.preventDefault()
+
+                this.errors.push('The title field is missing.')
+
+                return false
+            }
+        }
+    }
+    Vue.createApp(TeamApp).mount('#team-app')
+</script>
+
+
+{% endblock %}

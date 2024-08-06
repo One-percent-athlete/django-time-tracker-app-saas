@@ -29,7 +29,6 @@ ALLOWED_HOSTS = []
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'mypage'
-LOGOUT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Application definition
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'userprofile',
+    'team',
 ]
 
 MIDDLEWARE = [
