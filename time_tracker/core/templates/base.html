@@ -11,13 +11,13 @@
         <nav class="navbar">
             <div class="navbar-brand">
                 <a href="{% url 'home' %}" class="navbar-item">Time Tracker</a>
-                {% if user.is_superuser %}
-                <a href="http://127.0.0.1:8000/admin/"></a>
-                {% endif %}
             </div>
 
             <div class="navbar-menu">
                 <div class="navbar-end">
+                    {% if request.user.is_superuser %}
+                        <a href="http://127.0.0.1:8000/admin/" class="navbar-item">Admin</a>
+                    {% endif %}
                     <a href="{% url 'plans' %}" class="navbar-item">Plans</a>
                     
                     <div class="navbar-item">
@@ -36,6 +36,11 @@
     </div>
 
     <section class="section">
+        {% if messages %}
+            {% for m in messages %}
+            <div class="notification is-info">{{ m }}</div>
+            {% endfor %}
+        {% endif %}
         {% block content %}
         {% endblock %}
     </section>
