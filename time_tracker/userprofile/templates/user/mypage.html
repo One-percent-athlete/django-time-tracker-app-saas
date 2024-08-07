@@ -36,11 +36,33 @@ My Page
 
 <div class="columns">
     <div class="column is-12">
-        <h2 class="subtitle">Teams</h2>
         <a href="{% url 'create_team' %}" class="button is-success">Create Team</a>
     </div>
 </div>
 
+<h2 class="subtitle">Active Teams</h2>
+<div class="columns">
+
+    {% if active_team %}
+    <div class="column is-4">
+            <div class="notification has-background-success-light">
+                <h3 class="is-size-5">{{ active_team.name }}{% if active_team.created_by == request.user %}(owner){% else %}(member){% endif %}</h3>
+
+                <h3 class="is-size-6">SHOW PLAN HERE</h3>
+                
+                <hr>
+                
+                <a href="{% url 'team_detail' active_team.id %}" class="button is-success">Details</a>
+                {% if active_team.created_by == request.user %}
+                <a href="#" class="button is-info">Invite Users</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %} 
+    </div>
+<hr>
+
+<h2 class="subtitle">Teams</h2>
 <div class="columns">
     {% for team in teams %}
     <div class="column is-4">
@@ -51,8 +73,8 @@ My Page
 
             <hr>
 
-            <a href="#" class="button is-success">Details</a>
-            <a href="#" class="button is-info">Activate</a>
+            <a href="{% url 'team_detail' team.id %}" class="button is-success">Details</a>
+            <a href="{% url 'activate_team' team.id %}" class="button is-info">Activate</a>
         </div>
     </div>
     {% endfor %}

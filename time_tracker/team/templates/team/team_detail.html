@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ team.name }}
+{% endblock %}
+
+{% block content %}
+
+<nav class="breadcrumb" aria-label="breadcrumb">
+    <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="{% url 'mypage' %}">My Page</a></li>
+        <li class="is-active"><a href="{% url 'team_detail' team.id %}" aria-current="page">{{ team.name }}</a></li>
+    </ul>
+</nav>
+
+
+<div class="columns is-multiline" id="team-app">
+    <div class="column is-4">
+        <h1 class="title">{{ team.name }}</h1>
+        <hr>
+        <h2 class="subtitle mt-6">Members</h2>
+        {% for member in team.members.all %}
+        <p>{{ member.username }}</p>
+        {% endfor %}
+    </div>
+
+    {% if team.created_by == request.user %}
+    <div class="column is-12">
+        <hr>
+        <h3 class="subtitle">Owner Actions</h3>
+        <a href="{% url 'edit_team' %}" class="button is-warning">Edit Team</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

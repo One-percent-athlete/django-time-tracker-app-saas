@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Create Team
+Edit {{ team.name }}
 {% endblock %}
 
 {% block content %}
@@ -10,14 +10,14 @@ Create Team
     <ul>
         <li><a href="#">Dashboard</a></li>
         <li><a href="{% url 'mypage' %}">My Page</a></li>
-        <li class="is-active"><a href="{% url 'create_team' %}" aria-current="page">Create Team</a></li>
+        <li class="is-active"><a href="{% url 'edit_team' %}" aria-current="page">Edit {{ team.name }}</a></li>
     </ul>
 </nav>
 
 
 <div class="columns" id="team-app">
     <div class="column is-4">
-        <h1 class="title">Create Team</h1>
+        <h1 class="title">Edit Team</h1>
 
         <form method="post" action="." class="mt-6" @submit="validateForm">
             {% csrf_token %}
@@ -37,7 +37,7 @@ Create Team
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-success">Create Team</button>
+                    <button class="button is-success">Save Changes</button>
                 </div>
             </div>
         </form>
@@ -52,7 +52,7 @@ Create Team
     const TeamApp = {
         data() {
             return {
-                name: '',
+                name: '{{ team.name }}',
                 errors: []
             }
         },
