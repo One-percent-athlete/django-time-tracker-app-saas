@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Projects
+{% endblock %}
+
+{% block content %}
+<div  id="project-app">
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li class="is-active"><a href="{% url 'projects' %}" aria-current="page">Project</a></li>
+        </ul>
+    </nav>
+    
+    <div class="columns">
+        <div class="column is-4">
+            <h1 class="title">Projects</h1>
+
+            <a @click="showProjectModal=!showProjectModal" class="button is-success">Create Project</a>
+        </div>
+    </div>
+
+    <div class="modal" :class="{'is-active': showProjectModal}">
+        <div class="modal-background">
+            
+            <form method="post" action="." @submit="validateForm">
+                {% csrf_token %}
+                <div class="modal-card-head">
+                    <p class="modal-card-title">Create Project</p>
+                </div>
+            </form>
+        </div>
+    
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    const ProjectApp = {
+        data() {
+            return {
+                showProjectModal: false,
+                name: '',
+                showErrors: false
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                if (this.name) {
+                    return true
+                }
+                this.showErrors = true
+                
+                e.preventDefault()
+
+                return false
+            }
+        }
+    }
+
+    Vue.createApp(ProjectApp).mount('#project-app')
+</script>
+
+{% endblock %}

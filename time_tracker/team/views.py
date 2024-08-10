@@ -59,5 +59,5 @@ def activate_team(request, team_id):
     userprofile.save()
 
     messages.info(request, 'The Team Was Activated.')
-    return redirect('team_detail', team_id=team.id)
+    return redirect('mypage')
     
