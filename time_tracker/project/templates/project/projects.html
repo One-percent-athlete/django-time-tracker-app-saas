@@ -5,7 +5,7 @@ Projects
 {% endblock %}
 
 {% block content %}
-<div  id="project-app">
+<div  id="projects-app">
     <nav class="breadcrumb" aria-label="breadcrumb">
         <ul>
             <li><a href="#">Dashboard</a></li>
@@ -21,13 +21,56 @@ Projects
         </div>
     </div>
 
+    <div class="columns">
+        {% for project in projects %}
+        <div class="column is-3">
+            <div class="notification">
+                <h2 class="is-size-5">{{ project.name }}</h2>
+                <p class="is-size-7 mb-2">({{ project.created_by }})</p>
+                <p class="is-size-7">{{ project.registered_at }}</p>
+                <p class="is-size-7">Tasks: {{ project.num_tasks_todo }}</p>
+
+                <hr>
+
+                <a href="{% url 'project' project.id %}" class="button is-success">Details</a>
+
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="column is-3">
+            <div class="notification">
+                No projects yet...
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="modal" :class="{'is-active': showProjectModal}">
         <div class="modal-background">
             
             <form method="post" action="." @submit="validateForm">
                 {% csrf_token %}
-                <div class="modal-card-head">
-                    <p class="modal-card-title">Create Project</p>
+                <div class="modal-card mt-6">
+                    <div class="modal-card-head">
+                        <p class="modal-card-title">Create Project</p>
+                    </div>
+                    <div class="modal-card-body">
+                        <div class="field">
+                            <label>Project Name</label>
+                            <div class="control">
+                                <input type="text" name="name" id="id_name" v-model="name" class="input">
+                            </div>
+                        </div>
+
+                        <div class="notification is-danger" v-if="showErrors">
+                            Project Name Is Missing.
+                        </div>
+                    </div>
+                    <div class="modal-card-foot">
+                        <button class="button is-success">Create</button>
+                        <button class="button" @click="showProjectModal=!showProjectModal">Cancel</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -39,7 +82,7 @@ Projects
 
 {% block script %}
 <script>
-    const ProjectApp = {
+    const ProjectsApp = {
         data() {
             return {
                 showProjectModal: false,
@@ -62,7 +105,7 @@ Projects
         }
     }
 
-    Vue.createApp(ProjectApp).mount('#project-app')
+    Vue.createApp(ProjectsApp).mount('#projects-app')
 </script>
 
 {% endblock %}

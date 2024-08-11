@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ task.name }}
+{% endblock %}
+
+{% block content %}
+<div  id="project-app">
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{% url 'projects' %}" aria-current="page">Projects</a></li>
+            <li><a href="{% url 'project' project.id %}">{{ project.name }}</a></li>
+            <li class="is-active"><a href="{% url 'task' project.id task.id %}" aria-current="page">{{ task.name }}</a></li>
+        </ul>
+    </nav>
+
+    <div class="columns">
+        <div class="column is-4">
+            <h1 class="title">{{ task.name }}</h1>
+            <a href="{% url 'edit_task' project.id task.id %}" class="button is-warning">Edit Task</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

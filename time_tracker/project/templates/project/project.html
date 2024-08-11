@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ project.name }}
+{% endblock %}
+
+{% block content %}
+<div  id="project-app">
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{% url 'projects' %}" aria-current="page">Projects</a></li>
+            <li class="is-active"><a href="{% url 'project' project.id %}" aria-current="page">{{ project.name }}</a></li>
+        </ul>
+    </nav>
+
+    <div class="columns">
+        <div class="column is-4">
+            <h1 class="title">{{ project.name }}</h1>
+
+            <div class="buttons">
+                <a href="{% url 'edit_project' project.id %}" class="button is-warning">Edit Project</a>
+                <a @click="showTaskModal=!showTaskModal" class="button is-success">Add Task</a>
+            </div>
+        </div>
+    </div>
+
+    {% if not tasks_todo and not tasks_done %}
+        <div class="columns">
+            <div class="column is-3">
+                <div class="notification">
+                    <p>No Task Yet.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="columns is-multiline">
+        {% if tasks_todo %}
+        <div class="column is-12">
+            <h2 class="is-size-4">Todo</h2>
+        </div>
+        
+
+        {% for task in tasks_todo %}
+            <div class="column is-2">
+                <div class="notification">
+                    <h3 class="is-size-5">{{ task.name }}
+                    </h3>
+
+                    <hr>
+
+                    <a class="button is-success" href="{% url 'task' project.id task.id %}">Details</a>
+                </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+        <hr>
+
+        {% if tasks_done %}
+        <div class="column is-12">
+            <h2 class="is-size-4">Done</h2>
+        </div>
+
+        {% for task in tasks_done %}
+        <div class="column is-4">
+            <div class="notification">
+                <h3 class="is-size-5">{{ task.name }}
+                </h3>
+
+                <hr>
+
+                <a class="button is-success" href="{% url 'task' project.id task.id %}">Details</a>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="modal" :class="{'is-active': showTaskModal}">
+        <div class="modal-background">
+            <form method="post" action="." @submit="validateForm">
+                {% csrf_token %}
+                <div class="modal-card mt-6">
+                    <div class="modal-card-head">
+                        <p class="modal-card-title">Add Task</p>
+                    </div>
+                    <div class="modal-card-body">
+                        <div class="field">
+                            <label>Task Name</label>
+                            <div class="control">
+                                <input type="text" name="name" id="id_name" v-model="name" class="input">
+                            </div>
+                        </div>
+
+                        <div class="notification is-danger" v-if="showErrors">
+                            Task Name Is Missing.
+                        </div>
+                    </div>
+                    <div class="modal-card-foot">
+                        <button class="button is-success">Add</button>
+                        <button class="button" @click="showTaskModal=!showTaskModal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    const ProjectApp = {
+        data() {
+            return {
+                showTaskModal: false,
+                name: '',
+                showErrors: false
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                if (this.name) {
+                    return true
+                }
+                this.showErrors = true
+                
+                e.preventDefault()
+
+                return false
+            }
+        }
+    }
+
+    Vue.createApp(ProjectApp).mount('#project-app')
+</script>
+
+{% endblock %}
