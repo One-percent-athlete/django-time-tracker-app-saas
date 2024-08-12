@@ -16,11 +16,20 @@ class Project(models.Model):
     def __str__(self):
         return f"{self.name} - {self.created_by}"
     
-    def registered_at(self):
-        return 0
+    def registered_time(self):
+        # time = 0
+
+        # entries = self.entries.all()
+
+        # for entry in entries:
+        #     time = time + entries.minutes
+
+        # return time
+
+        return sum(entry.minutes for entry in self.entries.all())
     
     def num_tasks_todo(self):
-        return 0
+        return self.tasks.filter(status=Task.TODO).count()
     
 class Task(models.Model):
 
@@ -49,4 +58,23 @@ class Task(models.Model):
         return self.name 
     
     def registered_time(self):
-        return 0
+        return sum(entry.minutes for entry in self.entries.all())
+
+class Entry(models.Model):
+    team = models.ForeignKey(Team, related_name='entries', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='entries', on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name='entries', on_delete=models.CASCADE)
+    minutes = models.IntegerField(default=0)
+    is_tracked = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, related_name='entries', on_delete=models.CASCADE)
+    created_at = models.DateTimeField()
+
+    class Meta:
+       ordering = ['-created_at']
+       verbose_name_plural = "entries"
+
+
+    def __str__(self):
+        if self.task:
+            return '%s - %s' % (self.task.name, self.created_at)
+        return '%' % self.created_at

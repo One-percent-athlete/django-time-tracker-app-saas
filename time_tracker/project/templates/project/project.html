@@ -46,7 +46,7 @@
                 <div class="notification">
                     <h3 class="is-size-5">{{ task.name }}
                     </h3>
-
+                    <p>Registered Time: {{ task.registered_time }}</p>
                     <hr>
 
                     <a class="button is-success" href="{% url 'task' project.id task.id %}">Details</a>
@@ -62,11 +62,11 @@
         </div>
 
         {% for task in tasks_done %}
-        <div class="column is-4">
+        <div class="column is-2">
             <div class="notification">
                 <h3 class="is-size-5">{{ task.name }}
                 </h3>
-
+                <p>Registered Time: {{ task.registered_time }}</p>
                 <hr>
 
                 <a class="button is-success" href="{% url 'task' project.id task.id %}">Details</a>
