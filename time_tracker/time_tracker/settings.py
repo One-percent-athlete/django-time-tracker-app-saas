@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'userprofile',
     'team',
     'project',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
