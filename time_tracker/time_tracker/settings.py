@@ -31,6 +31,16 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'mypage'
 LOGOUT_REDIRECT_URL = 'home'
 
+EMAIL_HOST = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = ''
+EMAIL_USE_TIL = True
+DEFAULT_EMAIL_FROM = 'Time Tracker <noreply@timetracker.com>'
+ACCEPTATION_URL = 'http://127.0.0.1:8000/signup/'
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -70,7 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'team.context_processors.active_team',
+                'team.context_processors.active_team',
             ],
         },
     },

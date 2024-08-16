@@ -18,10 +18,20 @@
 <div class="columns is-multiline" id="team-app">
     <div class="column is-4">
         <h1 class="title">{{ team.name }}</h1>
+
+        {% if request.user == team.created_by %}
+        <a class="button is-primary" href="{% url 'invite' %}">Invite</a>
+        {% endif %}
         <hr>
         <h2 class="subtitle mt-6">Members</h2>
         {% for member in team.members.all %}
         <p>{{ member.username }}</p>
+        {% endfor %}
+
+        <h2 class="subtitle mt-6">Invited Members</h2>
+
+        {% for invitation in invitations %}
+        <p>{{ invitation.email }} - {{ invitation.date_sent|timesince }} ago</p>
         {% endfor %}
     </div>
 

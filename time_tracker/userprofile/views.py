@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from team.models import Team
+from team.models import Team, Invitation
+from team.utilities import invitation_accepted
+
 
 @login_required
 def mypage(request):
     teams = Team.objects.exclude(pk=request.user.userprofile.active_team_id)
-    if request.user.userprofile.active_team_id:
-        active_team = Team.objects.get(pk=request.user.userprofile.active_team_id)
-    return render(request, 'user/mypage.html', {'teams':teams, 'active_team': active_team})
+    invitations = Invitation.objects.filter(email=request.user.email, status=Invitation.INVITED)
+
+    return render(request, 'user/mypage.html', {'teams':teams, 'invitations':invitations})
 
 @login_required
 def edit_profile(request):
@@ -23,3 +25,34 @@ def edit_profile(request):
         return redirect('mypage')
 
     return render(request, 'user/edit_profile.html')
+
+@login_required
+def accept_invitation(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        email = request.user.email
+        invitations = Invitation.objects.filter(code=code, email=email)
+
+        if invitations:
+            invitation = invitations[0]
+            invitation.status = Invitation.ACCEPTED
+            invitation.save()
+
+            team = invitation.team
+            team.members.add(request.user)
+            team.save()
+
+            userporfile = request.user.userprofile
+            userporfile.active_team_id = team.id
+            userporfile.save()
+
+            messages.info(request, 'Invitation Accepted.')
+
+            invitation_accepted(email, team, invitation)
+
+            return redirect('team', team_id=team.id)
+        else:
+            messages.info(request, 'Invitation Not Found.')
+            return redirect('mypage')
+    else:
+        return render(request, 'user/accept_invitation.html')

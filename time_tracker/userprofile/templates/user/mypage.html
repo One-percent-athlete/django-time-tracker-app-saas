@@ -39,30 +39,33 @@ My Page
     </div>
 </div>
 
-<h2 class="subtitle">Active Teams</h2>
-<div class="columns">
+{% if invitations %}
+<div class="notification is-info">
+    <h2 class="subtitle">Pending Invitations</h2>
+    {% for invitation in invitations %}
+    <a href="{% url 'accept_invitation' %}">{{ invitation.team.name }}</a>
+    {% endfor %}
+</div>
+{% endif %}
 
+<div class="columns">
     {% if active_team %}
     <div class="column is-4">
-            <div class="notification has-background-success-light">
-                <h3 class="is-size-5">{{ active_team.name }}{% if active_team.created_by == request.user %}(owner){% else %}(member){% endif %}</h3>
+        <div class="notification has-background-success-light">
+            <h3 class="is-size-5">{{ active_team.name }}{% if active_team.created_by == request.user %}(owner){% else %}(member){% endif %}</h3>
 
-                <h3 class="is-size-6">SHOW PLAN HERE</h3>
-                
-                <hr>
-                
-                <a href="{% url 'team_detail' active_team.id %}" class="button is-success">Details</a>
-                {% if active_team.created_by == request.user %}
-                <a href="#" class="button is-info">Invite Users</a>
-                {% endif %}
-            </div>
+            <h3 class="is-size-6">SHOW PLAN HERE</h3>
+            
+            <hr>
+            
+            <a href="{% url 'team_detail' active_team.id %}" class="button is-success">Details</a>
+            {% if active_team.created_by == request.user %}
+            <a href="{% url 'invite' %}" class="button is-info">Invite</a>
+            {% endif %}
         </div>
-        {% endif %} 
     </div>
-<hr>
+    {% endif %} 
 
-<h2 class="subtitle">Teams</h2>
-<div class="columns">
     {% for team in teams %}
     <div class="column is-4">
         <div class="notification">
@@ -76,7 +79,7 @@ My Page
             <a href="{% url 'activate_team' team.id %}" class="button is-info">Activate</a>
         </div>
     </div>
-    {% endfor %}
+{% endfor %}
 </div>
 
 

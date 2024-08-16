@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
 from userprofile.models import UserProfile
+from team.models import Invitation
 
 
 def home(request):
@@ -33,7 +34,12 @@ def signup(request):
 
             login(request, user)
 
-            return redirect('home')
+            invitations = Invitation.objects.filter(email=user.email, status=Invitation.INVITED)
+
+            if invitations:
+                return redirect('accept_invitation')
+            else:
+                return redirect('dashboard')
     else:
         form = UserCreationForm()
 
