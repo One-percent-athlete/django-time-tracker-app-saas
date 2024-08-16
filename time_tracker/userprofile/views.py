@@ -21,6 +21,12 @@ def edit_profile(request):
         request.user.email = request.POST.get('email')
         request.user.save()
 
+        if request.FILES:
+            avatar = request.FILES['avatar']
+            userprofile = request.user.userprofile
+            userprofile.avatar = avatar
+            userprofile.save()
+
         messages.success(request, 'Your Profile Has Been Updated.')
         return redirect('mypage')
 

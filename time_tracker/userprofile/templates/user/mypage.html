@@ -15,6 +15,9 @@ My Page
     <div class="column is-6">
         <div class="media mb-4">
             <div class="media-left">
+                <figure class="image is-64x64">
+                    <img src="{{ user.userprofile.get_avatar }}">
+                </figure>
             </div>
             <div class="media-content">
                 <p class="title is-3">{% firstof user.get_full_name user.username %}</p>

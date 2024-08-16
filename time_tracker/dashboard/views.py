@@ -59,3 +59,39 @@ def dashboard(request):
 
 
     return render(request, 'dashboard/dashboard.html', context)
+
+@login_required
+def show_user(request, user_id):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE)
+    projects = team.projects.all()
+    user = team.members.all().get(id=user_id)
+
+    num_days = int(request.GET.get('num_days', 0))
+    user_date = datetime.now() - timedelta(days=num_days)
+    entries = Entry.objects.filter(team=team, created_by=user, created_at__date=user_date, is_tracked=True)
+
+
+    user_num_months = int(request.GET.get('num_months', 0))
+    user_month = datetime.now() - relativedelta(months=user_num_months)
+    for project in projects:
+        project.time_for_user_and_project_and_month = get_time_for_user_and_project_and_month(team, project, user, user_month)
+
+    context = {
+        'user': user,
+        'team': team,
+        'latest_projects':projects[0:4],
+        
+        'entries': entries,
+
+        'num_days': num_days,
+        'user_date':user_date,
+
+        'user_num_months': user_num_months,
+        'user_month': user_month,
+
+        'time_for_user_and_month': get_time_for_user_and_month(team, user, user_month),
+        'time_for_user_and_date': get_time_for_user_and_date(team, user, user_date),
+    }
+
+
+    return render(request, 'dashboard/show_user.html', context)

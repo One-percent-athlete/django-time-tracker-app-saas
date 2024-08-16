@@ -20,6 +20,17 @@ Edit Profile
         <h1 class="title">Edit Profile</h1>
         <form method="post" action="." enctype="multipart/form-data">
             {% csrf_token %}
+            
+
+            <div class="field">
+                <label>Avatar</label>
+                <figure class="image is-64x64">
+                    <img src="{{ request.user.userprofile.get_avatar }}">
+                </figure>
+                <div class="control mt-2">
+                    <input type="file" name="avatar" id="id_avatar" class="input">
+                </div>
+            </div>
 
             <div class="field">
                 <label>First Name</label>
