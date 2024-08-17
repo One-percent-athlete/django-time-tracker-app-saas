@@ -34,3 +34,21 @@ def api_discard_timer(request):
         entry.delete()
 
     return JsonResponse({'success' : True})
+
+
+def api_get_tasks(request):
+    project_id = request.GET.get('project_id', '')
+
+    if project_id:
+        tasks = []
+        team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE)
+        project = get_object_or_404(Project, pk=project_id, team=team)
+
+        for task in project.tasks.all():
+            obj = {
+                'id':task.id,
+                'name': task.name
+            }
+            tasks.append(obj)
+        return JsonResponse({'success': True, 'tasks': tasks})
+    return JsonResponse({'success': False})

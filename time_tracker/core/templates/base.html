@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="modal-card-foot">
-                    <button class="button is-success">Add To Task</button>
+                    <button class="button is-success" @click="addToTask()">Add To Task</button>
                     <button class="button is-warning" @click="addLater()">Add Later</button>
                     <button class="button is-danger" @click="discardTimer()">Discard</button>
                 </div>
@@ -191,6 +191,9 @@
                         this.seconds = 0
                         this.showTrackingModal = false
             },
+            addToTask() {
+                window.location.href = '/dashboard/project/track_entry/' + this.entryID + '/'
+            }
         
         },
         mounted() {

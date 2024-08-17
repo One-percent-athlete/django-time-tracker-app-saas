@@ -77,4 +77,4 @@ class Entry(models.Model):
     def __str__(self):
         if self.task:
             return '%s - %s' % (self.task.name, self.created_at)
-        return '%' % self.created_at
+        return '%s' % self.created_at

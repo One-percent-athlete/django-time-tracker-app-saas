@@ -9,8 +9,11 @@ urlpatterns = [
     path('<int:project_id>/<int:task_id>/edit/', views.edit_task, name='edit_task'),
     path('<int:project_id>/<int:task_id>/<int:entry_id>/edit/', views.edit_entry, name='edit_entry'),
     path('<int:project_id>/<int:task_id>/<int:entry_id>/delete/', views.delete_entry, name='delete_entry'),
+    path('delete_untracked_entry/<int:entry_id>/', views.delete_untracked_entry, name='delete_untracked_entry'),
+    path('track_entry/<int:entry_id>/', views.track_entry, name='track_entry'),
 
     path('api/start_timer/', api.api_start_timer, name='api_start_timer'),
     path('api/stop_timer/', api.api_stop_timer, name='api_stop_timer'),
-    path('api/discard_timer/', api.api_discard_timer, name='api_discard_timer')
+    path('api/discard_timer/', api.api_discard_timer, name='api_discard_timer'),
+    path('api/get_tasks/', api.api_get_tasks, name='api_get_tasks')
 ]

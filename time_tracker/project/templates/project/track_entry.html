@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Track Entry
+{% endblock %}
+
+{% block content %}
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="{% url 'projects' %}" aria-current="page">Projects</a></li>
+            <li class="is-active"><a href="{% url 'track_entry' entry.id %}" aria-current="page">Track Entry</a></li>
+        </ul>
+    </nav>
+
+    <div class="columns" id="track-entry-app">
+        <div class="column">
+            <h1 class="title">Track Entry</h1>
+
+            <form method="post" action=".">
+                {% csrf_token %}
+
+                <div class="field">
+                    <label>Project</label>
+
+                    <div class="control">
+                        <div class="select">
+                            <select name="project"  v-model="project" v-on:change="getTasks()">
+                                <option value="">Choose Project</option>
+                                {% for project in projects %}
+                                <option value="{{ project.id }}">{{ project.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <label>Task</label>
+
+                    <div class="control">
+                        <div class="select">
+                            <select name="task" v-model="task">
+                                <option v-for="task in tasks" v-bind:key="task.id" :value="task.id">[[ task.name ]]</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <label>Hours And Minutes</label>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <div class="select">
+                            <select name="hours">
+                                <option value="0"{% if hours == 0 %} selected {% endif %}>0 h</option>
+                                {% for i in 'x'|rjust:'10' %}
+                                <option value="{{ forloop.counter }}"{% if hours == forloop.counter %} selected {% endif %}>{{ forloop.counter }} h</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="control">
+                        <div class="select">
+                            <select name="minutes">
+                                <option value="0"{% if minutes == 0 %} selected {% endif %}>0 m</option>
+                                {% for i in 'x'|rjust:'59' %}
+                                <option value="{{ forloop.counter }}"{% if minutes == forloop.counter %} selected {% endif %}>{{ forloop.counter }} m</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Date</label>
+                    <div class="control">
+                        <input type="date" id="id_date" name="date" class="input" value="{{ entry.created_at|date:'Y-m-d' }}" placeholder="yyyy-mm-dd">
+                    </div>
+                </div>
+    
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    const TrackEntryApp = {
+        data() {
+            return {
+                tasks: [
+                    {'id': '', 
+                    'name':'Select Project First'
+                    }
+                ],
+                project: '',
+                task: ''
+            }
+        },
+        delimiters: ['[[',']]'],
+        methods: {
+            getTasks() {
+                if (this.project !== '') {
+                    fetch('/dashboard/project/api/get_tasks/?project_id=' + this.project, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then((result) => {
+                        this.tasks = result.tasks
+                        this.tasks.unshift({'id':'','name':'Select Task'})
+                    })
+                } else {
+                    this.tasks = [{'id':'', 'name':'Select Project First'}]
+                    this.task=''
+                }
+            }
+        }
+    } 
+    Vue.createApp(TrackEntryApp).mount('#track-entry-app')
+</script>
+
+
+{% endblock %}
+
